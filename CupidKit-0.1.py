@@ -102,7 +102,7 @@ for x in resp['items']:
 if matchtimelist == []: ##returns 0 if no matches found for game
     matchtimelist = [0]
 
-print('Average match length is ' + str((mean(matchtimelist))/60) + ' seconds.')
+print('Average match length is ' + str((mean(matchtimelist))/60) + ' minutes.')
 
 
 
