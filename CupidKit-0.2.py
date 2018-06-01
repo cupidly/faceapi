@@ -49,7 +49,7 @@ print("""
                              /         
                                                 
 """)
-print("CupidKit 0.15 created by Jake Dent (Cupidly)\n")
+print("CupidKit 0.2 created by Jake Dent (Cupidly)\n")
 
 name = input("Please input username: ")
 guid = get_guid(name)
@@ -149,33 +149,42 @@ print('This player played a total of ' + str(len(tournamentmatchlist)) + ' tourn
 print('This player played in a total of ' + str(len(uniquetournamentlist)) + ' unique tournaments in their last 100 matches.\n')
 
 def usercontrol():
-    userchoice = input('What would you like to see now? (Type number and hit ENTER)\n1. A list of all tournaments played in\n2. A list of all matches played in a tournament\n3. Exit\n4. A list of all tournament match lengths\n')
+    userchoice = input('What would you like to see now? (Type number and hit ENTER)\n1. A list of all tournaments played in\n2. A list of all matches played in a tournament\n3. A list of all tournament match lengths \n4. Calculate wins (This will take a minute)\n5. Display list of wins\n6. Exit\n')
     if userchoice == '1':
         print(uniquetournamentlist)
-        print('\nNow showing all unique tournaments!')
+        print('\nNow showing all unique tournaments!\n')
         usercontrol()
 
     if userchoice == '2':
         print(tournamentmatchlist)
-        print('\nNow showing all matches played in a tournament!')
+        print('\nNow showing all matches played in a tournament!\n')
+        usercontrol()
+
+    if userchoice == '4':
+        get_winlist()
+        usercontrol()
+
+    if userchoice == '5':
+        print(winlist)
+        print('Now showing a list of all matches won! ' + name + ' won ' + str(len(winlist)) + ' matches!\n') 
         usercontrol()
 
     if userchoice == '3':
-        quit()
-
-    if userchoice == '4':
         print(tournamentmatchtimelist)
-        print('\nNow showing length of all tournament matches (in seconds)')
+        print('\nNow showing length of all tournament matches (in seconds)\n')
         usercontrol()
+
+    if userchoice == '6':
+        quit()
 
     else:
         print('\nInvalid command, please use specified command!')
         usercontrol()
 
 counter = 0
-
+winlist = []
 def get_winner(x):
-    counter = 0
+    
     
     header = {
     'Authorization': "Bearer e0caffdb-be9c-42cc-8f07-d9e655b56576"
@@ -194,17 +203,35 @@ def get_winner(x):
 
     
     matchresult = resp
-    print(matchresult['results']['winner'])
-    print(matchresult['teams']['faction1']['roster_v1'][4]['guid'])
-    print(counter)
-    counter += 1
+    ##print(matchresult['results']['winner'])
+    ## NEED TO DO A FOR LOOP HERE INSTEAD TO LOOP THORUGH ALL PLAYERS
+    ## IN WINNING TEAM, TO FIX ISSUE WITH GAMES OF MORE OR LESS THAN 5
+    matchwinner = matchresult['results']['winner']
+    if guid == matchresult['teams'][matchwinner]['roster_v1'][0]['guid']:
+        winlist.append(matchresult['match_id'])
+    if guid == matchresult['teams'][matchwinner]['roster_v1'][1]['guid']:
+        winlist.append(matchresult['match_id'])
+    if guid == matchresult['teams'][matchwinner]['roster_v1'][2]['guid']:
+        winlist.append(matchresult['match_id'])
+    if guid == matchresult['teams'][matchwinner]['roster_v1'][3]['guid']:
+        winlist.append(matchresult['match_id'])
+    if guid == matchresult['teams'][matchwinner]['roster_v1'][4]['guid']:
+        winlist.append(matchresult['match_id'])
     return
 
 matchresult = None
 
 def get_winlist():
+    counter = 0
     for match in matchidlist:
         matchresult = get_winner(match)
-        print('hi')
+        print(str(matchidlistpercent * counter) + ' percent complete!')
+        counter += 1
+        if counter == len(matchidlist):
+            print('Calculation complete!')
+        
 
+matchidlistpercent = 100/ len(matchidlist)
+
+usercontrol()
 
