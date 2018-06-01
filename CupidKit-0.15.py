@@ -30,7 +30,6 @@ def get_guid(x):
     return guid
 
 
-
 print("Welcome to CupidKit, please follow the intructions!\n")
 print("CupidKit is tool developed for the CS team, by the CS team, to aid us in our daily operations")
 print("Cupidkit currently contains a range of tools to allow us to identify players abusing ladders/tournaments")
@@ -173,4 +172,5 @@ def usercontrol():
         usercontrol()
 
 
-usercontrol()
+
+
